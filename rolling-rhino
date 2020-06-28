@@ -7,8 +7,8 @@ function usage () {
   echo
 }
 
-function message() {
-    # $1 = type , $2 = message
+function fancy_message() {
+    # $1 = type , $2 = fancy_message
     # Message types
     # 0 - info
     # 1 - warning
@@ -38,7 +38,7 @@ echo "Rolling Rhino 🦏"
 
 # Check if the user running the script is root
 if [ "$(id -u)" -ne 0 ]; then
-  message 2 "You need to be root."
+  fancy_message 2 "You need to be root."
   exit 1
 fi
 
@@ -49,41 +49,41 @@ while [ $# -gt 0 ]; do
       usage
       exit 0;;
     *)
-      message 2 "\"${1}\" is not a supported parameter."
+      fancy_message 2 "\"${1}\" is not a supported parameter."
       usage
       exit 1;;
   esac
 done
 
 if which lsb_release 1>/dev/null; then
-  message 0 "lsb_release detected."
+  fancy_message 0 "lsb_release detected."
 else
-  message 2 "lsb_release not detected. Quitting."
+  fancy_message 2 "lsb_release not detected. Quitting."
   exit 1
 fi
 
 if grep -q devel /etc/apt/sources.list; then
-  message 2 "Already tracking the devel series. Nothing to do."
+  fancy_message 2 "Already tracking the devel series. Nothing to do."
   exit 1
 fi
 
 OS_CODENAME=$(lsb_release --codename --short)
 OS_ID=$(lsb_release --id --short)
 if [ "${OS_ID}" == "Ubuntu" ]; then
-  message 0 "Ubuntu detected."
+  fancy_message 0 "Ubuntu detected."
 else
-  message 2 "${OS_ID} detected, which is not supported."
+  fancy_message 2 "${OS_ID} detected, which is not supported."
   exit 1
 fi
 
 OS_DESCRIPTION=$(lsb_release --description --short)
 if [[ "${OS_DESCRIPTION}" == *"development branch"* ]]; then
-  message 0 "${OS_DESCRIPTION} detected."
+  fancy_message 0 "${OS_DESCRIPTION} detected."
 elif  [[ "${OS_DESCRIPTION}" == *"LTS"* ]]; then
-  message 2 "${OS_DESCRIPTION} detected, which is not supported."
+  fancy_message 2 "${OS_DESCRIPTION} detected, which is not supported."
   exit 1
 else
-  message 2 "${OS_DESCRIPTION} detected, which is not supported."
+  fancy_message 2 "${OS_DESCRIPTION} detected, which is not supported."
   exit 1
 fi
 
@@ -91,21 +91,21 @@ DESKTOP_FOUND=0
 for META in kubuntu-desktop lubuntu-desktop ubuntu-desktop ubuntu-budgie-desktop ubuntukylin-desktop ubuntu-mate-desktop ubuntustudio-desktop xubuntu-desktop; do
   INSTALLED=$(apt list --installed "${META}" 2>/dev/null | grep installed)
   if [ -n "${INSTALLED}" ]; then
-    message 0 "Detected ${META}"
+    fancy_message 0 "Detected ${META}"
     DESKTOP_FOUND=1
     break
   fi
 done
 
 if [ ${DESKTOP_FOUND} -eq 0 ]; then
-  message 2 "No installed desktop packages were detected. Quitting."
+  fancy_message 2 "No installed desktop packages were detected. Quitting."
   exit 1
 fi
 
 if [ -z "$(ls -A /etc/apt/sources.list.d/*.list)" ]; then
-  message 0 "No PPAs detected, this is good."
+  fancy_message 0 "No PPAs detected, this is good."
 else
-  message 1 "PPAs detected, you're reponisble for taking care of PPA migrations in the future."
+  fancy_message 1 "PPAs detected, you're reponisble for taking care of PPA migrations in the future."
 fi
 
 message 0 "All checks passed."
