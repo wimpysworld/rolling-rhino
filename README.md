@@ -1,4 +1,4 @@
-# Rolling Rhino
+# Rolling Rhino; for the toughest of Ubuntu users
 
 Convert Ubuntu into a *"rolling release"* that tracks the `devel` series.
 
