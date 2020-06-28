@@ -74,3 +74,14 @@ else
   message 2 "${OS_ID} detected, which is not supported."
   exit 1
 fi
+
+OS_DESCRIPTION=$(lsb_release --description --short)
+if [[ "${OS_DESCRIPTION}" == *"development branch"* ]]; then
+  message 0 "${OS_DESCRIPTION} detected."
+elif  [[ "${OS_DESCRIPTION}" == *"LTS"* ]]; then
+  message 2 "${OS_DESCRIPTION} detected, which is not supported."
+  exit 1
+else
+  message 2 "${OS_DESCRIPTION} detected, which is not supported."
+  exit 1
+fi
