@@ -100,3 +100,9 @@ if [ ${DESKTOP_FOUND} -eq 0 ]; then
   message 2 "Not desktop installed detected. Quitting."
   exit 1
 fi
+
+if [ -z "$(ls -A /etc/apt/sources.list.d/*.list)" ]; then
+  message 0 "No PPAs detect, this is good."
+else
+  message 1 "PPAs detected, you're reponisble for taking care of PPA migrations in the future."
+fi
