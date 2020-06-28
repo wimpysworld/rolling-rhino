@@ -91,9 +91,9 @@ tbc
 
 ## TODO
 
-  - [ ] Detect system is running an Ubuntu Development Branch.
-  - [ ] Detect desktop meta packages.
-  - [ ] Detect PPAs.
-  - [ ] Detect `sources.list` is not already tracking `devel`.
-  - [ ] Create clean `sources.list` that tracks `devel`.
+  - [-] Detect system is running an Ubuntu Development Branch.
+  - [-] Detect desktop meta packages.
+  - [-] Detect PPAs.
+  - [-] Detect `sources.list` is not already tracking `devel`.
+  - [-] Create clean `sources.list` that tracks `devel`.
   - [ ] Use `yad` to [create a UI](https://sanana.kiev.ua/index.php/yad)
