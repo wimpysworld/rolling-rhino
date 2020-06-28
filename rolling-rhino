@@ -113,7 +113,7 @@ read -p "Are you you want to start tracking the devel series?" -n 1 -r
 echo    # (optional) move to a new line
 if [[ ${REPLY} =~ ^[Yy]$ ]]; then
     mv  /etc/apt/sources.list  /etc/apt/sources.list.${OS_CODENAME}
-    cat <<EOM > /etc/apt/sources.list
+    cat < EOM > /etc/apt/sources.list
 # See http://help.ubuntu.com/community/UpgradeNotes for how to upgrade to
 # newer versions of the distribution.
 deb http://archive.ubuntu.com/ubuntu devel main restricted
