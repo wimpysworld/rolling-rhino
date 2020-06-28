@@ -160,7 +160,10 @@ deb http://archive.ubuntu.com/ubuntu devel-backports main restricted universe mu
 deb http://security.ubuntu.com/ubuntu devel-security main restricted
 # deb-src http://security.ubuntu.com/ubuntu devel-security main restricted
 deb http://security.ubuntu.com/ubuntu devel-security universe
-# deb-src http://sec    mv  /etc/apt/sources.list  /etc/apt/sources.list.${OS_CODENAME}
+# deb-src http://security.ubuntu.com/ubuntu devel-security universe
+deb http://security.ubuntu.com/ubuntu devel-security multiverse
+# deb-src http://security.ubuntu.com/ubuntu devel-security multiverse
+EOM
 
 
     fancy_message 0 "Switching to devel series."
