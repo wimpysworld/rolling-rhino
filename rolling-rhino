@@ -105,7 +105,7 @@ fi
 if [ -z "$(ls -A /etc/apt/sources.list.d/*.list 2>/dev/null)" ]; then
   fancy_message 0 "No PPAs detected, this is good."
 else
-  fancy_message 1 "PPAs detected, you're reponisble for taking care of PPA migrations in the future."
+  fancy_message 1 "PPAs detected, you're reponsible for taking care of PPA migrations in the future."
 fi
 
 fancy_message 0 "All checks passed."
