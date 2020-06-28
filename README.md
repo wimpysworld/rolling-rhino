@@ -44,6 +44,12 @@ along with some ideas as to how it could be implemented. [Sergio Schvezov](https
 This inspired me to create this `rolling-rhino` tool to somewhat implement
 Stuart's idea by taking advantage of the `devel` series.
 
+### Where it all came together
+
+See the video where I worked with the community to put together the initial implementation of `rolling-rhino`.
+
+[![Making Ubuntu a rolling release - Rolling Rhino](https://img.youtube.com/vi/Q4k8LqEUxlM/0.jpg)](https://www.youtube.com/watch?v=Q4k8LqEUxlM)
+
 ## Usage
 
   * Install Ubuntu Desktop, or one of the desktop flavours, **from a daily image**.
