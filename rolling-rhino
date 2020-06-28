@@ -55,6 +55,9 @@ while [ $# -gt 0 ]; do
   esac
 done
 
-message 0 "Some information"
-message 1 "Some warning"
-message 2 "Some error"
+if which lsb_release 1>/dev/null; then
+  message 0 "lsb_release detected."
+else
+  message 2 "lsb_release not detected. Quitting."
+  exit 1
+fi
