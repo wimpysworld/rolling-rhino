@@ -105,12 +105,11 @@ fi
 if [ -z "$(ls -A /etc/apt/sources.list.d/*.list 2>/dev/null)" ]; then
   fancy_message 0 "No PPAs detected, this is good."
 else
-  fancy_message 1 "PPAs detected, you're reponsible for taking care of PPA migrations in the future."
+  fancy_message 1 "PPAs detected, you're responsible for taking care of PPA migrations in the future."
 fi
 
 fancy_message 0 "All checks passed."
 read -p "Are you sure you want to start tracking the devel series? [Y/N]" -n 1 -r
-echo    # (optional) move to a new line
 if [[ ${REPLY} =~ ^[Yy]$ ]]; then
     cp  /etc/apt/sources.list /etc/apt/sources.list.${OS_CODENAME}
     cat < EOM > /etc/apt/sources.list
@@ -160,7 +159,10 @@ deb http://archive.ubuntu.com/ubuntu devel-backports main restricted universe mu
 deb http://security.ubuntu.com/ubuntu devel-security main restricted
 # deb-src http://security.ubuntu.com/ubuntu devel-security main restricted
 deb http://security.ubuntu.com/ubuntu devel-security universe
-# deb-src http://sec    mv  /etc/apt/sources.list  /etc/apt/sources.list.${OS_CODENAME}
+# deb-src http://security.ubuntu.com/ubuntu devel-security universe
+deb http://security.ubuntu.com/ubuntu devel-security multiverse
+# deb-src http://security.ubuntu.com/ubuntu devel-security multiverse
+EOM
 
     fancy_message 0 "Switching to devel series."
     apt -y autoclean
