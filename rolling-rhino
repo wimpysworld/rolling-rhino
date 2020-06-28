@@ -66,3 +66,11 @@ if grep -q devel /etc/apt/sources.list; then
   message 2 "Already tracking the devel series. Nothing to do."
   exit 1
 fi
+
+OS_ID=$(lsb_release --id --short)
+if [ "${OS_ID}" == "Ubuntu" ]; then
+  message 0 "Ubuntu detected."
+else
+  message 2 "${OS_ID} detected, which is not supported."
+  exit 1
+fi
