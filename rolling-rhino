@@ -85,3 +85,13 @@ else
   message 2 "${OS_DESCRIPTION} detected, which is not supported."
   exit 1
 fi
+
+DESKTOP_FOUND=0
+for META in kubuntu-desktop lubuntu-desktop ubuntu-desktop ubuntu-budgie-desktop ubuntukylin-desktop ubuntu-mate-desktop ubuntustudio-desktop xubuntu-desktop; do
+  INSTALLED=$(apt list --installed "${META}" 2>/dev/null | grep installed)
+  if [ -n "${INSTALLED}" ]; then
+    message 0 "Detected ${META}"
+    DESKTOP_FOUND=1
+    break
+  fi
+done
