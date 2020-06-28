@@ -102,7 +102,7 @@ if [ ${DESKTOP_FOUND} -eq 0 ]; then
   exit 1
 fi
 
-if [ -z "$(ls -A /etc/apt/sources.list.d/*.list)" ]; then
+if [ -z "$(ls -A /etc/apt/sources.list.d/*.list 2>/dev/null)" ]; then
   fancy_message 0 "No PPAs detected, this is good."
 else
   fancy_message 1 "PPAs detected, you're reponisble for taking care of PPA migrations in the future."
