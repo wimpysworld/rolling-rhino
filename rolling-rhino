@@ -162,3 +162,9 @@ deb http://security.ubuntu.com/ubuntu devel-security universe
 deb http://security.ubuntu.com/ubuntu devel-security multiverse
 # deb-src http://security.ubuntu.com/ubuntu devel-security multiverse
 EOM
+
+message 0 "Switching to devel series."
+apt -y autoclean
+apt -y clean
+apt -y update
+apt -y dist-upgrade
