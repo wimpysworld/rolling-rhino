@@ -28,7 +28,7 @@ If you use Rolling Rhino to opt-in to `devel` series you're assuming support
 of your system, including taking care of PPA migrations, cleaning
 obsolete/orphaned packages and **actively participating in any issue resolution
 for problems you may encounter** via [Launchpad](https://launchpad.net) using
-tools such are `apport` and `ubuntu-bug`.
+tools such as `apport` and `ubuntu-bug`.
 
 ### Origins of Rolling Rhino
 
