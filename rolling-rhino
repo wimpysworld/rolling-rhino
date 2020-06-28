@@ -34,6 +34,7 @@ function fancy_message() {
     esac
 }
 
+cat "$(dirname "$0")/logo.txt"
 echo "Rolling Rhino 🦏"
 
 # Check if the user running the script is root
