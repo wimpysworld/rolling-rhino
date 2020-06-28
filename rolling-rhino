@@ -98,17 +98,17 @@ for META in kubuntu-desktop lubuntu-desktop ubuntu-desktop ubuntu-budgie-desktop
 done
 
 if [ ${DESKTOP_FOUND} -eq 0 ]; then
-  message 2 "Not desktop installed detected. Quitting."
+  message 2 "No installed desktop packages were detected. Quitting."
   exit 1
 fi
 
 if [ -z "$(ls -A /etc/apt/sources.list.d/*.list)" ]; then
-  message 0 "No PPAs detect, this is good."
+  message 0 "No PPAs detected, this is good."
 else
   message 1 "PPAs detected, you're reponisble for taking care of PPA migrations in the future."
 fi
 
-message 0 "All check passed."
+message 0 "All checks passed."
 
 mv  /etc/apt/sources.list  /etc/apt/sources.list.${OS_CODENAME}
 cat <<EOM > /etc/apt/sources.list
