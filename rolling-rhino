@@ -61,3 +61,8 @@ else
   message 2 "lsb_release not detected. Quitting."
   exit 1
 fi
+
+if grep -q devel /etc/apt/sources.list; then
+  message 2 "Already tracking the devel series. Nothing to do."
+  exit 1
+fi
