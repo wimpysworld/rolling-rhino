@@ -1,0 +1,60 @@
+#!/usr/bin/env bash
+
+function usage () {
+  echo
+  echo "Usage"
+  echo "  $0"
+  echo
+}
+
+function message() {
+    # $1 = type , $2 = message
+    # Message types
+    # 0 - info
+    # 1 - warning
+    # 2 - error
+    if [ -z "${1}" ] || [ -z "${2}" ]; then
+      return
+    fi
+
+    local RED="\e[31m"
+    local GREEN="\e[32m"
+    local YELLOW="\e[33m"
+    local RESET="\e[0m"
+    local MESSAGE_TYPE=""
+    local MESSAGE=""
+    MESSAGE_TYPE="${1}"
+    MESSAGE="${2}"
+    
+    case ${MESSAGE_TYPE} in
+      0) echo -e "  [${GREEN}+${RESET}] INFO: ${MESSAGE}";;
+      1) echo -e "  [${YELLOW}*${RESET}] WARNING: ${MESSAGE}";;
+      2) echo -e "  [${RED}!${RESET}] ERROR: ${MESSAGE}";;
+      *) echo -e "  [?] UNKNOWN: ${MESSAGE}";;
+    esac
+}
+
+echo "Rolling Rhino 🦏"
+
+# Check if the user running the script is root
+if [ "$(id -u)" -ne 0 ]; then
+  message 2 "You need to be root."
+  exit 1
+fi
+
+# Take command line arguments
+while [ $# -gt 0 ]; do
+  case "${1}" in
+    -h|--h|-help|--help)
+      usage
+      exit 0;;
+    *)
+      message 2 "\"${1}\" is not a supported parameter."
+      usage
+      exit 1;;
+  esac
+done
+
+message 0 "Some information"
+message 1 "Some warning"
+message 2 "Some error"
