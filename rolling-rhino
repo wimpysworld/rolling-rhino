@@ -7,8 +7,8 @@ function usage () {
   echo
 }
 
-function message() {
-    # $1 = type , $2 = message
+function fancy_message() {
+    # $1 = type , $2 = fancy_message
     # Message types
     # 0 - info
     # 1 - warning
@@ -38,7 +38,7 @@ echo "Rolling Rhino 🦏"
 
 # Check if the user running the script is root
 if [ "$(id -u)" -ne 0 ]; then
-  message 2 "You need to be root."
+  fancy_message 2 "You need to be root."
   exit 1
 fi
 
@@ -49,41 +49,41 @@ while [ $# -gt 0 ]; do
       usage
       exit 0;;
     *)
-      message 2 "\"${1}\" is not a supported parameter."
+      fancy_message 2 "\"${1}\" is not a supported parameter."
       usage
       exit 1;;
   esac
 done
 
 if which lsb_release 1>/dev/null; then
-  message 0 "lsb_release detected."
+  fancy_message 0 "lsb_release detected."
 else
-  message 2 "lsb_release not detected. Quitting."
+  fancy_message 2 "lsb_release not detected. Quitting."
   exit 1
 fi
 
 if grep -q devel /etc/apt/sources.list; then
-  message 2 "Already tracking the devel series. Nothing to do."
+  fancy_message 2 "Already tracking the devel series. Nothing to do."
   exit 1
 fi
 
 OS_CODENAME=$(lsb_release --codename --short)
 OS_ID=$(lsb_release --id --short)
 if [ "${OS_ID}" == "Ubuntu" ]; then
-  message 0 "Ubuntu detected."
+  fancy_message 0 "Ubuntu detected."
 else
-  message 2 "${OS_ID} detected, which is not supported."
+  fancy_message 2 "${OS_ID} detected, which is not supported."
   exit 1
 fi
 
 OS_DESCRIPTION=$(lsb_release --description --short)
 if [[ "${OS_DESCRIPTION}" == *"development branch"* ]]; then
-  message 0 "${OS_DESCRIPTION} detected."
+  fancy_message 0 "${OS_DESCRIPTION} detected."
 elif  [[ "${OS_DESCRIPTION}" == *"LTS"* ]]; then
-  message 2 "${OS_DESCRIPTION} detected, which is not supported."
+  fancy_message 2 "${OS_DESCRIPTION} detected, which is not supported."
   exit 1
 else
-  message 2 "${OS_DESCRIPTION} detected, which is not supported."
+  fancy_message 2 "${OS_DESCRIPTION} detected, which is not supported."
   exit 1
 fi
 
@@ -91,26 +91,76 @@ DESKTOP_FOUND=0
 for META in kubuntu-desktop lubuntu-desktop ubuntu-desktop ubuntu-budgie-desktop ubuntukylin-desktop ubuntu-mate-desktop ubuntustudio-desktop xubuntu-desktop; do
   INSTALLED=$(apt list --installed "${META}" 2>/dev/null | grep installed)
   if [ -n "${INSTALLED}" ]; then
-    message 0 "Detected ${META}"
+    fancy_message 0 "Detected ${META}"
     DESKTOP_FOUND=1
     break
   fi
 done
 
 if [ ${DESKTOP_FOUND} -eq 0 ]; then
-  message 2 "No installed desktop packages were detected. Quitting."
+  fancy_message 2 "No installed desktop packages were detected. Quitting."
   exit 1
 fi
 
 if [ -z "$(ls -A /etc/apt/sources.list.d/*.list)" ]; then
-  message 0 "No PPAs detected, this is good."
+  fancy_message 0 "No PPAs detected, this is good."
 else
-  message 1 "PPAs detected, you're reponisble for taking care of PPA migrations in the future."
+  fancy_message 1 "PPAs detected, you're reponisble for taking care of PPA migrations in the future."
 fi
 
-message 0 "All checks passed."
+fancy_message 0 "All checks passed."
+read -p "Are you you want to start tracking the devel series?" -n 1 -r
+echo    # (optional) move to a new line
+if [[ ${REPLY} =~ ^[Yy]$ ]]; then
+    mv  /etc/apt/sources.list  /etc/apt/sources.list.${OS_CODENAME}
+    cat <<EOM > /etc/apt/sources.list
+# See http://help.ubuntu.com/community/UpgradeNotes for how to upgrade to
+# newer versions of the distribution.
+deb http://archive.ubuntu.com/ubuntu devel main restricted
+# deb-src http://archive.ubuntu.com/ubuntu devel main restricted
 
-mv  /etc/apt/sources.list  /etc/apt/sources.list.${OS_CODENAME}
+## Major bug fix updates produced after the final release of the
+## distribution.
+deb http://archive.ubuntu.com/ubuntu devel-updates main restricted
+# deb-src http://archive.ubuntu.com/ubuntu devel-updates main restricted
+
+## N.B. software from this repository is ENTIRELY UNSUPPORTED by the Ubuntu
+## team. Also, please note that software in universe WILL NOT receive any
+## review or updates from the Ubuntu security team.
+deb http://archive.ubuntu.com/ubuntu devel universe
+# deb-src http://archive.ubuntu.com/ubuntu devel universe
+deb http://archive.ubuntu.com/ubuntu devel-updates universe
+# deb-src http://archive.ubuntu.com/ubuntu devel-updates universe
+
+## N.B. software from this repository is ENTIRELY UNSUPPORTED by the Ubuntu
+## team, and may not be under a free licence. Please satisfy yourself as to
+## your rights to use the software. Also, please note that software in
+## multiverse WILL NOT receive any review or updates from the Ubuntu
+## security team.
+deb http://archive.ubuntu.com/ubuntu devel multiverse
+# deb-src http://archive.ubuntu.com/ubuntu devel multiverse
+deb http://archive.ubuntu.com/ubuntu devel-updates multiverse
+# deb-src http://archive.ubuntu.com/ubuntu devel-updates multiverse
+
+## N.B. software from this repository may not have been tested as
+## extensively as that contained in the main release, although it includes
+## newer versions of some applications which may provide useful features.
+## Also, please note that software in backports WILL NOT receive any review
+## or updates from the Ubuntu security team.
+deb http://archive.ubuntu.com/ubuntu devel-backports main restricted universe multiverse
+# deb-src http://archive.ubuntu.com/ubuntu devel-backports main restricted universe multiverse
+
+## Uncomment the following two lines to add software from Canonical's
+## 'partner' repository.
+## This software is not part of Ubuntu, but is offered by Canonical and the
+## respective vendors as a service to Ubuntu users.
+# deb http://archive.canonical.com/ubuntu devel partner
+# deb-src http://archive.canonical.com/ubuntu devel partner
+
+deb http://security.ubuntu.com/ubuntu devel-security main restricted
+# deb-src http://security.ubuntu.com/ubuntu devel-security main restricted
+deb http://security.ubuntu.com/ubuntu devel-security universe
+# deb-src http://sec    mv  /etc/apt/sources.list  /etc/apt/sources.list.${OS_CODENAME}
 cat <<EOM > /etc/apt/sources.list
 # See http://help.ubuntu.com/community/UpgradeNotes for how to upgrade to
 # newer versions of the distribution.
@@ -163,8 +213,10 @@ deb http://security.ubuntu.com/ubuntu devel-security multiverse
 # deb-src http://security.ubuntu.com/ubuntu devel-security multiverse
 EOM
 
-message 0 "Switching to devel series."
-apt -y autoclean
-apt -y clean
-apt -y update
-apt -y dist-upgrade
+    fancy_message 0 "Switching to devel series."
+    apt -y autoclean
+    apt -y clean
+    apt -y update
+    apt -y dist-upgrade
+    apt -y dist-upgrade
+fi
