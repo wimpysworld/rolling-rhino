@@ -8,7 +8,7 @@ function usage () {
 }
 
 function fancy_message() {
-    # $1 = type , $2 = fancy_message
+    # $1 = type , $2 = message
     # Message types
     # 0 - info
     # 1 - warning
