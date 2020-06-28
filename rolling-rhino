@@ -109,7 +109,7 @@ else
 fi
 
 fancy_message 0 "All checks passed."
-read -p "Are you sure want to start tracking the devel series? [Y/N]" -n 1 -r
+read -p "Are you sure you want to start tracking the devel series? [Y/N]" -n 1 -r
 echo    # (optional) move to a new line
 if [[ ${REPLY} =~ ^[Yy]$ ]]; then
     mv  /etc/apt/sources.list  /etc/apt/sources.list.${OS_CODENAME}
