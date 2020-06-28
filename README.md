@@ -1,6 +1,6 @@
-# Rolling Rhino; for the toughest of Ubuntu users
+# Rolling Rhino
 
-Convert Ubuntu into a *"rolling release"* that tracks the `devel` series.
+Convert Ubuntu into a *"rolling release"* that tracks the `devel` series; **for the toughest of Ubuntu users**.
 
 <h1 align="center">
   <img src=".github/logo.png" alt="Rolling Rhino" />
@@ -16,7 +16,7 @@ Convert Ubuntu into a *"rolling release"* that tracks the `devel` series.
 
 Rolling Rhino is a simple tool to convert Ubuntu Desktop, and the official
 desktop flavours, that has been installed from a daily image into a
-*"rolling release"* by opting into and tracking the `devel` series. 
+*"rolling release"* by opting into and tracking the `devel` series.
 
 Rolling Rhino is intended for Ubuntu developers and experienced Ubuntu users
 who want to install Ubuntu once and the track all development updates with
@@ -44,17 +44,15 @@ along with some ideas as to how it could be implemented. [Sergio Schvezov](https
 This inspired me to create this `rolling-rhino` tool to somewhat implement
 Stuart's idea by taking advantage of the `devel` series.
 
-## Installation
+### Where it all came together
 
-Clone this repository:
+See the video where I worked with the community to put together the initial implementation of `rolling-rhino`.
 
-```
-git clone https://github.com/wimpysworld/rolling-rhino.git
-```
+[![Making Ubuntu a rolling release - Rolling Rhino](https://img.youtube.com/vi/Q4k8LqEUxlM/0.jpg)](https://www.youtube.com/watch?v=Q4k8LqEUxlM)
 
 ## Usage
 
-  * Install Ubuntu Desktop, or one of the desktop flavours, from a daily image.
+  * Install Ubuntu Desktop, or one of the desktop flavours, **from a daily image**.
     * [Ubuntu Desktop Daily Build](http://cdimage.ubuntu.com/daily-live/current/)
     * [Kubuntu Daily Build](http://cdimage.ubuntu.com/kubuntu/daily-live/current/)
     * [Lubuntu Daily Build](http://cdimage.ubuntu.com/lubuntu/daily-live/current/)
@@ -63,24 +61,25 @@ git clone https://github.com/wimpysworld/rolling-rhino.git
     * [Ubuntu MATE Daily Build](http://cdimage.ubuntu.com/ubuntu-mate/daily-live/current/)
     * [Ubuntu Studio Daily Build](http://cdimage.ubuntu.com/ubuntustudio/dvd/current/)
     * [Xubuntu Daily Build](http://cdimage.ubuntu.com/xubuntu/daily-live/current/)
-  * Use `rolling-rhino` to convert it to a rolling release.
+  * Boot the new install and use `rolling-rhino` to convert it to a rolling release.
 
 ```
+git clone https://github.com/wimpysworld/rolling-rhino.git
+cd rolling-rhino
 ./rolling-rhino
 ```
 
 Which will output something like this:
 
 ```
-tbc
-```
-
-### All the options
-
-Here are the full usage instructions:
-
-```
-tbc
+Rolling Rhino 🦏
+  [+] INFO: lsb_release detected.
+  [+] INFO: Ubuntu detected.
+  [+] INFO: Ubuntu 20.04 LTS detected.
+  [+] INFO: Detected ubuntu-desktop.
+  [+] INFO: No PPAs detected, this is good."
+  [+] INFO: All checks passed.
+Are you sure want to start tracking the devel series? [Y/N]
 ```
 
 ## Credits
@@ -91,9 +90,9 @@ tbc
 
 ## TODO
 
-  - [ ] Detect system is running an Ubuntu Development Branch.
-  - [ ] Detect desktop meta packages.
-  - [ ] Detect PPAs.
-  - [ ] Detect `sources.list` is not already tracking `devel`.
-  - [ ] Create clean `sources.list` that tracks `devel`.
+  - [x] Detect system is running an Ubuntu Development Branch.
+  - [x] Detect desktop meta packages.
+  - [x] Detect PPAs.
+  - [x] Detect `sources.list` is not already tracking `devel`.
+  - [x] Create clean `sources.list` that tracks `devel`.
   - [ ] Use `yad` to [create a UI](https://sanana.kiev.ua/index.php/yad)
