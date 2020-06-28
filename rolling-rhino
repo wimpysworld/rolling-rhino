@@ -95,3 +95,8 @@ for META in kubuntu-desktop lubuntu-desktop ubuntu-desktop ubuntu-budgie-desktop
     break
   fi
 done
+
+if [ ${DESKTOP_FOUND} -eq 0 ]; then
+  message 2 "Not desktop installed detected. Quitting."
+  exit 1
+fi
