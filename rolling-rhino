@@ -80,7 +80,7 @@ OS_DESCRIPTION=$(lsb_release --description --short)
 if [[ "${OS_DESCRIPTION}" == *"development branch"* ]]; then
   fancy_message 0 "${OS_DESCRIPTION} detected."
 elif  [[ "${OS_DESCRIPTION}" == *"LTS"* ]]; then
-  fancy_message 2 "${OS_DESCRIPTION} detected, which is not supported."
+  fancy_message 2 "${OS_DESCRIPTION} detected, which is not supported. Only daily/development Ubuntu releases are supported."
   exit 1
 else
   fancy_message 2 "${OS_DESCRIPTION} detected, which is not supported."
