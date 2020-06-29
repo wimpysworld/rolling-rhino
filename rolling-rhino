@@ -75,8 +75,9 @@ else
 fi
 
 DISTRO_DESCRIPTION=$(lsb_release --description --short)
-if [[ "${DISTRO_DESCRIPTION}" == *"development branch"* ]]; then
-  fancy_message 0 "${DISTRO_DESCRIPTION} detected."
+elif  [[ "${DISTRO_DESCRIPTION}" == *"LTS"* ]]; then
+  fancy_message 2 "${DISTRO_DESCRIPTION} detected, which is not supported."
+  exit 1
 else
   fancy_message 2 "${DISTRO_DESCRIPTION} detected, which is not supported."
   exit 1
