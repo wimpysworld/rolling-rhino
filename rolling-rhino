@@ -1,10 +1,8 @@
 #!/usr/bin/env bash
 
-function usage () {
-  echo
-  echo "Usage"
-  echo "  $0"
-  echo
+function usage() {
+  echo "\nUsage"
+  echo "  $0\n"
 }
 
 function fancy_message() {
@@ -38,7 +36,7 @@ echo "Rolling Rhino 🦏"
 
 # Check if the user running the script is root
 if [ "$(id -u)" -ne 0 ]; then
-  fancy_message 2 "You need to be root."
+  fancy_message 2 "To run this script, you must be root (try running with sudo)."
   exit 1
 fi
 
@@ -49,7 +47,7 @@ while [ $# -gt 0 ]; do
       usage
       exit 0;;
     *)
-      fancy_message 2 "\"${1}\" is not a supported parameter."
+      fancy_message 2 "No parameter by the name of \"${1}\""
       usage
       exit 1;;
   esac
@@ -67,23 +65,20 @@ if grep -q devel /etc/apt/sources.list; then
   exit 1
 fi
 
-OS_CODENAME=$(lsb_release --codename --short)
-OS_ID=$(lsb_release --id --short)
-if [ "${OS_ID}" == "Ubuntu" ]; then
+DISTRO_CODENAME=$(lsb_release --codename --short)
+DISTRO_ID=$(lsb_release --id --short)
+if [ "${DISTRO_ID}" == "Ubuntu" ]; then
   fancy_message 0 "Ubuntu detected."
 else
-  fancy_message 2 "${OS_ID} detected, which is not supported."
+  fancy_message 2 "${DISTRO_ID} detected, which is not supported."
   exit 1
 fi
 
-OS_DESCRIPTION=$(lsb_release --description --short)
-if [[ "${OS_DESCRIPTION}" == *"development branch"* ]]; then
-  fancy_message 0 "${OS_DESCRIPTION} detected."
-elif  [[ "${OS_DESCRIPTION}" == *"LTS"* ]]; then
-  fancy_message 2 "${OS_DESCRIPTION} detected, which is not supported."
-  exit 1
+DISTRO_DESCRIPTION=$(lsb_release --description --short)
+if [[ "${DISTRO_DESCRIPTION}" == *"development branch"* ]]; then
+  fancy_message 0 "${DISTRO_DESCRIPTION} detected."
 else
-  fancy_message 2 "${OS_DESCRIPTION} detected, which is not supported."
+  fancy_message 2 "${DISTRO_DESCRIPTION} detected, which is not supported."
   exit 1
 fi
 
@@ -98,20 +93,20 @@ for META in kubuntu-desktop lubuntu-desktop ubuntu-desktop ubuntu-budgie-desktop
 done
 
 if [ ${DESKTOP_FOUND} -eq 0 ]; then
-  fancy_message 2 "No installed desktop packages were detected. Quitting."
+  fancy_message 2 "No installed desktop packages were detected. Quitting..."
   exit 1
 fi
 
 if [ -z "$(ls -A /etc/apt/sources.list.d/*.list 2>/dev/null)" ]; then
   fancy_message 0 "No PPAs detected, this is good."
 else
-  fancy_message 1 "PPAs detected, you're responsible for taking care of PPA migrations in the future."
+  fancy_message 1 "PPAs were detected, you're responsible for taking care of PPA migrations in the future."
 fi
 
 fancy_message 0 "All checks passed."
 read -p "Are you sure you want to start tracking the devel series? [Y/N]" -n 1 -r
 if [[ ${REPLY} =~ ^[Yy]$ ]]; then
-    cp  /etc/apt/sources.list /etc/apt/sources.list.${OS_CODENAME}
+    cp  /etc/apt/sources.list /etc/apt/sources.list.${DISTRO_CODENAME}
     cat < EOM > /etc/apt/sources.list
 # See http://help.ubuntu.com/community/UpgradeNotes for how to upgrade to
 # newer versions of the distribution.
@@ -164,9 +159,10 @@ deb http://security.ubuntu.com/ubuntu devel-security multiverse
 # deb-src http://security.ubuntu.com/ubuntu devel-security multiverse
 EOM
 
-    fancy_message 0 "Switching to devel series."
+    fancy_message 0 "Switching to devel series..."
     apt -y autoclean
     apt -y clean
     apt -y update
     apt -y dist-upgrade
+    fancy_message 0 "Success! Switched to devel series."
 fi
