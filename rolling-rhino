@@ -34,7 +34,6 @@ function fancy_message() {
     esac
 }
 
-cat "$(dirname "$0")/logo.txt"
 echo "Rolling Rhino 🦏"
 
 # Check if the user running the script is root
@@ -170,4 +169,6 @@ EOF
     apt -y clean
     apt -y update
     apt -y dist-upgrade
+    fancy_message 0 "Your Rolling Rhino is ready."
+    cat "$(dirname "$0")/logo.txt"
 fi
