@@ -89,7 +89,7 @@ fi
 
 DESKTOP_FOUND=0
 for META in kubuntu-desktop lubuntu-desktop ubuntu-desktop ubuntu-budgie-desktop ubuntukylin-desktop ubuntu-mate-desktop ubuntustudio-desktop xubuntu-desktop; do
-  INSTALLED=$(LANG=C apt list --installed "${META}" 2>/dev/null | grep installed)
+  INSTALLED=$(env LANG=C apt list --installed "${META}" 2>/dev/null | grep installed)
   if [ -n "${INSTALLED}" ]; then
     fancy_message 0 "Detected ${META}."
     DESKTOP_FOUND=1
