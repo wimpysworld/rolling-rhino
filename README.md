@@ -28,7 +28,9 @@ If you use Rolling Rhino to opt-in to `devel` series you're assuming support
 of your system, including taking care of PPA migrations, cleaning
 obsolete/orphaned packages and **actively participating in any issue resolution
 for problems you may encounter** via [Launchpad](https://launchpad.net) using
-tools such as `apport` and `ubuntu-bug`.
+tools such as `apport` and `ubuntu-bug`. Also, when you run `apt update`, note
+that you should run 'apt autoremove --purge' to clear up any old packages, since there
+still might be some traces of packages.
 
 ### Origins of Rolling Rhino
 
