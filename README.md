@@ -77,7 +77,7 @@ Rolling Rhino 🦏
   [+] INFO: Ubuntu detected.
   [+] INFO: Ubuntu 20.04 LTS detected.
   [+] INFO: Detected ubuntu-desktop.
-  [+] INFO: No PPAs detected, this is good."
+  [+] INFO: No PPAs detected, this is good.
   [+] INFO: All checks passed.
 Are you sure want to start tracking the devel series? [Y/N]
 ```
