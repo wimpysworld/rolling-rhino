@@ -7,6 +7,15 @@ function usage () {
   echo
 }
 
+function update_ppas () {
+      cd /etc/apt/sources.list.d
+      for f in *; do
+        if grep -q ppa.launchpad.net ./$f; then
+            sed -i -e 's/'${OS_CODENAME}'/devel/g' ./$f
+        fi
+      done
+}
+
 function fancy_message() {
     # $1 = type , $2 = message
     # Message types
@@ -62,11 +71,6 @@ else
   exit 1
 fi
 
-if grep -q devel /etc/apt/sources.list; then
-  fancy_message 2 "Already tracking the devel series. Nothing to do."
-  exit 1
-fi
-
 OS_CODENAME=$(lsb_release --codename --short)
 OS_ID=$(lsb_release --id --short)
 if [ "${OS_ID}" == "Ubuntu" ]; then
@@ -74,6 +78,16 @@ if [ "${OS_ID}" == "Ubuntu" ]; then
 else
   fancy_message 2 "${OS_ID} detected, which is not supported."
   exit 1
+fi
+
+if grep -q devel /etc/apt/sources.list; then
+  fancy_message 2 "Already tracking the devel series. Updating launchpad PPAs."
+  update_ppas
+  apt -y autoclean
+  apt -y clean
+  apt -y update
+  apt -y dist-upgrade
+  exit 0
 fi
 
 OS_DESCRIPTION=$(lsb_release --description --short)
@@ -102,10 +116,12 @@ if [ ${DESKTOP_FOUND} -eq 0 ]; then
   exit 1
 fi
 
+UPDATE_PPAS=0
 if [ -z "$(ls -A /etc/apt/sources.list.d/*.list 2>/dev/null)" ]; then
   fancy_message 0 "No PPAs detected, this is good."
 else
-  fancy_message 1 "PPAs detected, you're responsible for taking care of PPA migrations in the future."
+  fancy_message 1 "PPAs detected, the script will update launchpad PPAs to track the devel series."
+  UPDATE_PPAS=1
 fi
 
 fancy_message 0 "All checks passed."
@@ -165,10 +181,15 @@ deb http://security.ubuntu.com/ubuntu devel-security multiverse
 EOF
 
     fancy_message 0 "Switching to devel series."
+    
+    if [ ${UPDATE_PPAS} -eq 1 ]; then
+	update_ppas
+    fi
+    
     apt -y autoclean
     apt -y clean
     apt -y update
     apt -y dist-upgrade
     fancy_message 0 "Your Rolling Rhino is ready."
     cat "$(dirname "$0")/logo.txt"
-fi
+fi  
