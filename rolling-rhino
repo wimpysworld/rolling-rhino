@@ -27,9 +27,9 @@ function fancy_message() {
     MESSAGE="${2}"
     
     case ${MESSAGE_TYPE} in
-      0) echo -e "  [${GREEN}+${RESET}] INFO: ${MESSAGE}";;
-      1) echo -e "  [${YELLOW}*${RESET}] WARNING: ${MESSAGE}";;
-      2) echo -e "  [${RED}!${RESET}] ERROR: ${MESSAGE}";;
+      info) echo -e "  [${GREEN}+${RESET}] INFO: ${MESSAGE}";; # Previously "0"
+      warn) echo -e "  [${YELLOW}*${RESET}] WARNING: ${MESSAGE}";; # Previously "1"
+      error) echo -e "  [${RED}!${RESET}] ERROR: ${MESSAGE}";; # Previously "2"
       *) echo -e "  [?] UNKNOWN: ${MESSAGE}";;
     esac
 }
@@ -38,7 +38,7 @@ echo "Rolling Rhino 🦏"
 
 # Check if the user running the script is root
 if [ "$(id -u)" -ne 0 ]; then
-  fancy_message 2 "You need to be root."
+  fancy_message error "You need to be root."
   exit 1
 fi
 
@@ -49,41 +49,41 @@ while [ $# -gt 0 ]; do
       usage
       exit 0;;
     *)
-      fancy_message 2 "\"${1}\" is not a supported parameter."
+      fancy_message error "\"${1}\" is not a supported parameter."
       usage
       exit 1;;
   esac
 done
 
 if which lsb_release 1>/dev/null; then
-  fancy_message 0 "lsb_release detected."
+  fancy_message info "lsb_release detected."
 else
-  fancy_message 2 "lsb_release not detected. Quitting."
+  fancy_message error "lsb_release not detected. Quitting."
   exit 1
 fi
 
 if grep -q devel /etc/apt/sources.list; then
-  fancy_message 2 "Already tracking the devel series. Nothing to do."
+  fancy_message error "Already tracking the devel series. Nothing to do."
   exit 1
 fi
 
 OS_CODENAME=$(lsb_release --codename --short)
 OS_ID=$(lsb_release --id --short)
 if [ "${OS_ID}" == "Ubuntu" ]; then
-  fancy_message 0 "Ubuntu detected."
+  fancy_message info "Ubuntu detected."
 else
-  fancy_message 2 "${OS_ID} detected, which is not supported."
+  fancy_message error "${OS_ID} detected, which is not supported."
   exit 1
 fi
 
 OS_DESCRIPTION=$(lsb_release --description --short)
 if [[ "${OS_DESCRIPTION}" == *"development branch"* ]]; then
-  fancy_message 0 "${OS_DESCRIPTION} detected."
+  fancy_message info "${OS_DESCRIPTION} detected."
 elif  [[ "${OS_DESCRIPTION}" == *"LTS"* ]]; then
-  fancy_message 2 "${OS_DESCRIPTION} detected. Switching a LTS release to the devel series directly is not supported."
+  fancy_message error "${OS_DESCRIPTION} detected. Switching a LTS release to the devel series directly is not supported."
   exit 1
 else
-  fancy_message 2 "${OS_DESCRIPTION} detected. Switching an interim release to the devel series directly is not supported."
+  fancy_message error "${OS_DESCRIPTION} detected. Switching an interim release to the devel series directly is not supported."
   exit 1
 fi
 
@@ -91,25 +91,26 @@ DESKTOP_FOUND=0
 for META in kubuntu-desktop lubuntu-desktop ubuntu-desktop ubuntu-budgie-desktop ubuntukylin-desktop ubuntu-mate-desktop ubuntustudio-desktop xubuntu-desktop; do
   INSTALLED=$(env LANG=C apt list --installed "${META}" 2>/dev/null | grep installed)
   if [ -n "${INSTALLED}" ]; then
-    fancy_message 0 "Detected ${META}."
+    fancy_message info "Detected ${META}."
     DESKTOP_FOUND=1
     break
   fi
 done
 
 if [ ${DESKTOP_FOUND} -eq 0 ]; then
-  fancy_message 2 "No installed desktop packages were detected. Quitting."
+  fancy_message error "No installed desktop packages were detected. Quitting."
   exit 1
 fi
 
 if [ -z "$(ls -A /etc/apt/sources.list.d/*.list 2>/dev/null)" ]; then
-  fancy_message 0 "No PPAs detected, this is good."
+  fancy_message info "No PPAs detected, this is good."
 else
-  fancy_message 1 "PPAs detected, you're responsible for taking care of PPA migrations in the future."
+  fancy_message warn "PPAs detected, you're responsible for taking care of PPA migrations in the future."
 fi
 
-fancy_message 0 "All checks passed."
+fancy_message info "All checks passed."
 read -p "Are you sure you want to start tracking the devel series? [y/N]" -n 1 -r
+
 if [[ ${REPLY} =~ ^[Yy]$ ]]; then
     cp  /etc/apt/sources.list /etc/apt/sources.list.${OS_CODENAME}
     cat << EOF > /etc/apt/sources.list
@@ -164,11 +165,11 @@ deb http://security.ubuntu.com/ubuntu devel-security multiverse
 # deb-src http://security.ubuntu.com/ubuntu devel-security multiverse
 EOF
 
-    fancy_message 0 "Switching to devel series."
+    fancy_message info "Switching to devel series."
     apt -y autoclean
     apt -y clean
     apt -y update
     apt -y dist-upgrade
-    fancy_message 0 "Your Rolling Rhino is ready."
+    fancy_message info "Your Rolling Rhino is ready."
     cat "$(dirname "$0")/logo.txt"
 fi
