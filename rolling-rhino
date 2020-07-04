@@ -89,7 +89,7 @@ fi
 
 DESKTOP_FOUND=0
 for META in kubuntu-desktop lubuntu-desktop ubuntu-desktop ubuntu-budgie-desktop ubuntukylin-desktop ubuntu-mate-desktop ubuntustudio-desktop xubuntu-desktop; do
-  INSTALLED=$(apt list --installed "${META}" 2>/dev/null | grep installed)
+  INSTALLED=$(env LANG=C apt list --installed "${META}" 2>/dev/null | grep installed)
   if [ -n "${INSTALLED}" ]; then
     fancy_message info "Detected ${META}."
     DESKTOP_FOUND=1
@@ -109,7 +109,8 @@ else
 fi
 
 fancy_message info "All checks passed."
-read -p "Are you sure you want to start tracking the devel series? [Y/N]" -n 1 -r
+read -p "Are you sure you want to start tracking the devel series? [y/N]" -n 1 -r
+
 if [[ ${REPLY} =~ ^[Yy]$ ]]; then
     cp  /etc/apt/sources.list /etc/apt/sources.list.${OS_CODENAME}
     cat << EOF > /etc/apt/sources.list
