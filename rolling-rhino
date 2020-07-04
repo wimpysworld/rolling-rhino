@@ -171,6 +171,8 @@ EOF
     apt -y clean
     apt -y update
     apt -y dist-upgrade
+    apt -y autoremove
     fancy_message info "Your Rolling Rhino is ready."
+
     cat "$(dirname "$0")/logo.txt"
 fi
