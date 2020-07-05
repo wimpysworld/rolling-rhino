@@ -82,6 +82,17 @@ Rolling Rhino 🦏
 Are you sure want to start tracking the devel series? [Y/N]
 ```
 
+### rhinoctl (Go edition)
+
+Alternatively, you can try out the Go-powered CLI, called "rhinoctl".
+Please note: this method currently requires building the binary locally, which requires [Go](https://golang.org/) to be installed.
+
+```
+cd rolling-rhino/go
+make
+./rhinoctl
+```
+
 ## Credits
 
   * Thanks to [Stuart Langridge](https://twitter.com/sil) for [naming the project and proposing the idea]().
