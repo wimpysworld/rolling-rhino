@@ -66,7 +66,7 @@ See the video where I worked with the community to put together the initial impl
 ```
 git clone https://github.com/wimpysworld/rolling-rhino.git
 cd rolling-rhino
-./rolling-rhino
+sudo ./rolling-rhino
 ```
 
 Which will output something like this:
