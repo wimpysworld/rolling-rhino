@@ -34,13 +34,12 @@ function fancy_message() {
     esac
 }
 
-echo "Rolling Rhino 🦏"
-
-# Check if the user running the script is root
-if [ "$(id -u)" -ne 0 ]; then
-  fancy_message error "You need to be root."
-  exit 1
+# Check if the user running the script is root, ask for permissions otherwise
+if [ "$UID" -ne 0 ]; then
+  exec sudo "$0" "$@"
 fi
+
+echo "Rolling Rhino 🦏"
 
 # Take command line arguments
 while [ $# -gt 0 ]; do
