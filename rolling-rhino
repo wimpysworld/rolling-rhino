@@ -47,11 +47,13 @@ function take_zfs_snapshots() {
 	
 		if [[ $ZFS_ROOT_MOUNT == \/ && $ZFS_BOOT_MOUNT == \/boot ]]
 		then
-			echo "ZFS on root detected.  Taking snapshots before making any changes:"
-			echo "   rpool/ROOT@rollingrhino-\"$TIME_STAMP\""
-			echo "   bpool/BOOT@rollingrhino-\"$TIME_STAMP\""
+			echo ""
+			fancy_message info "ZFS on root detected.  Taking snapshots before making any changes:"
+			fancy_message info "rpool/ROOT@rollingrhino-$TIME_STAMP"
+			fancy_message info "bpool/BOOT@rollingrhino-$TIME_STAMP"
 			zfs snapshot -r rpool/ROOT@rollingrhino-"$TIME_STAMP"
 			zfs snapshot -r bpool/BOOT@rollingrhinoboot-"$TIME_STAMP"
+			echo ""
 		fi
 	fi
 }
@@ -138,7 +140,7 @@ read -p "Are you sure you want to start tracking the devel series? [y/N]" -n 1 -
 if [[ ${REPLY} =~ ^[Yy]$ ]]; then
 
     take_zfs_snapshots  
-    exit 1
+    
 
     cp  /etc/apt/sources.list /etc/apt/sources.list.${OS_CODENAME}
     cat << EOF > /etc/apt/sources.list
