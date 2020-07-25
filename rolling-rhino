@@ -113,43 +113,51 @@ fancy_message info "All checks passed."
 read -p "Are you sure you want to start tracking the devel series? [y/N]" -n 1 -r
 
 if [[ ${REPLY} =~ ^[Yy]$ ]]; then
+    HOST_ARCH="$(uname --machine)"
+    if [ "${HOST_ARCH}" == "x86_64" ]; then
+      ARCHIVE="http://archive.ubuntu.com/ubuntu"
+      SEC_ARCHIVE="http://security.ubuntu.com/ubuntu"
+    else
+      ARCHIVE="http://ports.ubuntu.com/ubuntu-ports"
+      SEC_ARCHIVE="http://ports.ubuntu.com/ubuntu-ports"
+    fi
     cp  /etc/apt/sources.list /etc/apt/sources.list.${OS_CODENAME}
     cat << EOF > /etc/apt/sources.list
 # See http://help.ubuntu.com/community/UpgradeNotes for how to upgrade to
 # newer versions of the distribution.
-deb http://archive.ubuntu.com/ubuntu devel main restricted
-# deb-src http://archive.ubuntu.com/ubuntu devel main restricted
+deb ${ARCHIVE} devel main restricted
+# deb-src ${ARCHIVE} devel main restricted
 
 ## Major bug fix updates produced after the final release of the
 ## distribution.
-deb http://archive.ubuntu.com/ubuntu devel-updates main restricted
-# deb-src http://archive.ubuntu.com/ubuntu devel-updates main restricted
+deb ${ARCHIVE} devel-updates main restricted
+# deb-src ${ARCHIVE} devel-updates main restricted
 
 ## N.B. software from this repository is ENTIRELY UNSUPPORTED by the Ubuntu
 ## team. Also, please note that software in universe WILL NOT receive any
 ## review or updates from the Ubuntu security team.
-deb http://archive.ubuntu.com/ubuntu devel universe
-# deb-src http://archive.ubuntu.com/ubuntu devel universe
-deb http://archive.ubuntu.com/ubuntu devel-updates universe
-# deb-src http://archive.ubuntu.com/ubuntu devel-updates universe
+deb ${ARCHIVE} devel universe
+# deb-src ${ARCHIVE} devel universe
+deb ${ARCHIVE} devel-updates universe
+# deb-src ${ARCHIVE} devel-updates universe
 
 ## N.B. software from this repository is ENTIRELY UNSUPPORTED by the Ubuntu
 ## team, and may not be under a free licence. Please satisfy yourself as to
 ## your rights to use the software. Also, please note that software in
 ## multiverse WILL NOT receive any review or updates from the Ubuntu
 ## security team.
-deb http://archive.ubuntu.com/ubuntu devel multiverse
-# deb-src http://archive.ubuntu.com/ubuntu devel multiverse
-deb http://archive.ubuntu.com/ubuntu devel-updates multiverse
-# deb-src http://archive.ubuntu.com/ubuntu devel-updates multiverse
+deb ${ARCHIVE} devel multiverse
+# deb-src ${ARCHIVE} devel multiverse
+deb ${ARCHIVE} devel-updates multiverse
+# deb-src ${ARCHIVE} devel-updates multiverse
 
 ## N.B. software from this repository may not have been tested as
 ## extensively as that contained in the main release, although it includes
 ## newer versions of some applications which may provide useful features.
 ## Also, please note that software in backports WILL NOT receive any review
 ## or updates from the Ubuntu security team.
-deb http://archive.ubuntu.com/ubuntu devel-backports main restricted universe multiverse
-# deb-src http://archive.ubuntu.com/ubuntu devel-backports main restricted universe multiverse
+deb ${ARCHIVE} devel-backports main restricted universe multiverse
+# deb-src ${ARCHIVE} devel-backports main restricted universe multiverse
 
 ## Uncomment the following two lines to add software from Canonical's
 ## 'partner' repository.
@@ -158,12 +166,12 @@ deb http://archive.ubuntu.com/ubuntu devel-backports main restricted universe mu
 # deb http://archive.canonical.com/ubuntu devel partner
 # deb-src http://archive.canonical.com/ubuntu devel partner
 
-deb http://security.ubuntu.com/ubuntu devel-security main restricted
-# deb-src http://security.ubuntu.com/ubuntu devel-security main restricted
-deb http://security.ubuntu.com/ubuntu devel-security universe
-# deb-src http://security.ubuntu.com/ubuntu devel-security universe
-deb http://security.ubuntu.com/ubuntu devel-security multiverse
-# deb-src http://security.ubuntu.com/ubuntu devel-security multiverse
+deb ${SEC_ARCHIVE} devel-security main restricted
+# deb-src ${SEC_ARCHIVE} devel-security main restricted
+deb ${SEC_ARCHIVE} devel-security universe
+# deb-src ${SEC_ARCHIVE} devel-security universe
+deb ${SEC_ARCHIVE} devel-security multiverse
+# deb-src ${SEC_ARCHIVE} devel-security multiverse
 EOF
 
     fancy_message info "Switching to devel series."
