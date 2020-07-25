@@ -116,8 +116,10 @@ if [[ ${REPLY} =~ ^[Yy]$ ]]; then
     HOST_ARCH="$(uname --machine)"
     if [ "${HOST_ARCH}" == "x86_64" ]; then
       ARCHIVE="http://archive.ubuntu.com/ubuntu"
+      SEC_ARCHIVE="http://security.ubuntu.com/ubuntu"
     else
       ARCHIVE="http://ports.ubuntu.com/ubuntu-ports"
+      SEC_ARCHIVE="http://ports.ubuntu.com/ubuntu-ports"
     fi
     cp  /etc/apt/sources.list /etc/apt/sources.list.${OS_CODENAME}
     cat << EOF > /etc/apt/sources.list
@@ -164,12 +166,12 @@ deb ${ARCHIVE} devel-backports main restricted universe multiverse
 # deb http://archive.canonical.com/ubuntu devel partner
 # deb-src http://archive.canonical.com/ubuntu devel partner
 
-deb http://security.ubuntu.com/ubuntu devel-security main restricted
-# deb-src http://security.ubuntu.com/ubuntu devel-security main restricted
-deb http://security.ubuntu.com/ubuntu devel-security universe
-# deb-src http://security.ubuntu.com/ubuntu devel-security universe
-deb http://security.ubuntu.com/ubuntu devel-security multiverse
-# deb-src http://security.ubuntu.com/ubuntu devel-security multiverse
+deb ${SEC_ARCHIVE} devel-security main restricted
+# deb-src ${SEC_ARCHIVE} devel-security main restricted
+deb ${SEC_ARCHIVE} devel-security universe
+# deb-src ${SEC_ARCHIVE} devel-security universe
+deb ${SEC_ARCHIVE} devel-security multiverse
+# deb-src ${SEC_ARCHIVE} devel-security multiverse
 EOF
 
     fancy_message info "Switching to devel series."
