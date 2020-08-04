@@ -10,7 +10,7 @@ Convert Ubuntu into a *"rolling release"* that tracks the `devel` series; **for 
 
 <p align="center"><b>Simple shell script to make Ubuntu track the `devel` series.</b></p>
 <!-- <div align="center"><img src=".github/screenshot.png" alt="Rolling Rhino Screenshot" /></div> -->
-<p align="center">Made with 💝 for <img src="https://assets.ubuntu.com/v1/cb22ba5d-favicon-16x16.png" align="top" width="24" /></p>
+<p align="center">Made with 💝 for <img src=".github/ubuntu.png" align="top" width="18" /></p>
 
 ## Introduction
 
@@ -66,7 +66,7 @@ See the video where I worked with the community to put together the initial impl
 ```
 git clone https://github.com/wimpysworld/rolling-rhino.git
 cd rolling-rhino
-./rolling-rhino
+sudo ./rolling-rhino
 ```
 
 Which will output something like this:
@@ -79,7 +79,7 @@ Rolling Rhino 🦏
   [+] INFO: Detected ubuntu-desktop.
   [+] INFO: No PPAs detected, this is good.
   [+] INFO: All checks passed.
-Are you sure want to start tracking the devel series? [Y/N]
+Are you sure want to start tracking the devel series? [y/N]
 ```
 
 ## Credits
