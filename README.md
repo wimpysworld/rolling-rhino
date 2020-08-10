@@ -30,6 +30,10 @@ obsolete/orphaned packages and **actively participating in any issue resolution
 for problems you may encounter** via [Launchpad](https://launchpad.net) using
 tools such as `apport` and `ubuntu-bug`.
 
+You will see `W: Conflicting distribution:` warnings from `apt` as its
+configuration will now reference the `devel` series which is a pointer to the
+current in-development series. But they are just that, warnings.
+
 ### Origins of Rolling Rhino
 
 [Ubuntu Podcast](https://ubuntupodcast.org) had feedback about making Ubuntu
