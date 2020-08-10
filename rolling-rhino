@@ -187,6 +187,41 @@ apt -y update
 apt -y dist-upgrade
 apt -y autoremove
 
+dpkg-divert --local --rename --divert /etc/os-release.distrib /etc/os-release
+cat << EOF > /etc/os-release
+NAME="Ubuntu"
+VERSION="99.99 (Rolling Rhino)"
+ID=ubuntu
+ID_LIKE=debian
+PRETTY_NAME="Ubuntu Rolling Rhino"
+VERSION_ID="99.99"
+HOME_URL="https://www.ubuntu.com/"
+SUPPORT_URL="https://help.ubuntu.com/"
+BUG_REPORT_URL="https://bugs.launchpad.net/ubuntu/"
+PRIVACY_POLICY_URL="https://www.ubuntu.com/legal/terms-and-policies/privacy-policy"
+VERSION_CODENAME=rolling
+UBUNTU_CODENAME=rolling
+EOF
+
+dpkg-divert --local --rename --divert /etc/lsb-release.distrib /etc/lsb-release
+cat << EOF > /etc/lsb-release
+DISTRIB_ID=Ubuntu
+DISTRIB_RELEASE=99.99
+DISTRIB_CODENAME=rolling
+DISTRIB_DESCRIPTION="Ubuntu Rolling Rhino"
+EOF
+
+dpkg-divert --local --rename --divert /etc/issue.distrib /etc/issue
+cat << EOF > /etc/issue
+Ubuntu Rolling Rhino \n \l
+
+EOF
+
+dpkg-divert --local --rename --divert /etc/issue.net.distrib /etc/issue.net
+cat <<EOF > /etc/issue.net
+Ubuntu Rolling Rhino
+EOF
+
 fancy_message info "Your Rolling Rhino is ready."
 
 cat "$(dirname "$0")/logo.txt"
