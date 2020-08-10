@@ -110,19 +110,24 @@ else
 fi
 
 fancy_message info "All checks passed."
-read -p "Are you sure you want to start tracking the devel series? [y/N]" -n 1 -r
+read -p "Are you sure you want to start tracking the devel series? [y/N] " -n 1 -r
+echo # Move the cursor to the next line before progressing for a nicer user experience
 
-if [[ ${REPLY} =~ ^[Yy]$ ]]; then
-    HOST_ARCH="$(uname --machine)"
-    if [ "${HOST_ARCH}" == "x86_64" ]; then
-      ARCHIVE="http://archive.ubuntu.com/ubuntu"
-      SEC_ARCHIVE="http://security.ubuntu.com/ubuntu"
-    else
-      ARCHIVE="http://ports.ubuntu.com/ubuntu-ports"
-      SEC_ARCHIVE="http://ports.ubuntu.com/ubuntu-ports"
-    fi
-    cp  /etc/apt/sources.list /etc/apt/sources.list.${OS_CODENAME}
-    cat << EOF > /etc/apt/sources.list
+if [[ ! ${REPLY} =~ ^[Yy]$ ]]; then
+  fancy_message info "You don't want to track the devel series. Quitting."
+  exit 1
+fi
+
+HOST_ARCH="$(uname --machine)"
+if [ "${HOST_ARCH}" == "x86_64" ]; then
+  ARCHIVE="http://archive.ubuntu.com/ubuntu"
+  SEC_ARCHIVE="http://security.ubuntu.com/ubuntu"
+else
+  ARCHIVE="http://ports.ubuntu.com/ubuntu-ports"
+  SEC_ARCHIVE="http://ports.ubuntu.com/ubuntu-ports"
+fi
+cp  /etc/apt/sources.list /etc/apt/sources.list.${OS_CODENAME}
+cat << EOF > /etc/apt/sources.list
 # See http://help.ubuntu.com/community/UpgradeNotes for how to upgrade to
 # newer versions of the distribution.
 deb ${ARCHIVE} devel main restricted
@@ -174,13 +179,14 @@ deb ${SEC_ARCHIVE} devel-security multiverse
 # deb-src ${SEC_ARCHIVE} devel-security multiverse
 EOF
 
-    fancy_message info "Switching to devel series."
-    apt -y autoclean
-    apt -y clean
-    apt -y update
-    apt -y dist-upgrade
-    apt -y autoremove
-    fancy_message info "Your Rolling Rhino is ready."
+fancy_message info "Switching to devel series."
 
-    cat "$(dirname "$0")/logo.txt"
-fi
+apt -y autoclean
+apt -y clean
+apt -y update
+apt -y dist-upgrade
+apt -y autoremove
+
+fancy_message info "Your Rolling Rhino is ready."
+
+cat "$(dirname "$0")/logo.txt"
