@@ -22,6 +22,10 @@ Rolling Rhino is intended for Ubuntu developers and experienced Ubuntu users
 who want to install Ubuntu once and the track all development updates with
 automatic tracking of subsequent series.
 
+We have a Discord for this project:
+
+  * <https://discord.gg/DrQgYMf>
+
 ## Caveats
 
 If you use Rolling Rhino to opt-in to `devel` series you're assuming support
