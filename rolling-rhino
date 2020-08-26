@@ -107,6 +107,11 @@ if [ -z "$(ls -A /etc/apt/sources.list.d/*.list 2>/dev/null)" ]; then
   fancy_message info "No PPAs detected, this is good."
 else
   fancy_message warn "PPAs detected, you're responsible for taking care of PPA migrations in the future."
+  read -p "Do you want to disable the PPAs? [y/N]" -n 1 -r
+  if [[ ${REPLY} =~ ^[Yy]$ ]]; then
+    find /etc/apt/sources.list.d -type f -name "*.list" -print0 | \
+      while read -d $'\0' file; do sed -i 's/^\([^#].*\)/# \1/g' "$file"; done
+  fi
 fi
 
 fancy_message info "All checks passed."
