@@ -39,7 +39,7 @@ function take_zfs_snapshots() {
 	ZFS_INSTALLED=$(dpkg-query --show --showformat='${db:Status-Status}\n' 'zfsutils-linux' 2>&1)
 	ZSYS_INSTALLED=$(dpkg-query --show --showformat='${db:Status-Status}\n' 'zsys' 2>&1)
 
-	if [ $ZFS_INSTALLED == installed && $ZSYS_INSTALLED == installed]
+	if [[ $ZFS_INSTALLED == installed && $ZSYS_INSTALLED == installed ]]
 	then
 		echo ""
 		fancy_message info "ZFS on root detected.  Taking a snapshot before making any changes:"
