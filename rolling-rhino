@@ -37,24 +37,14 @@ function fancy_message() {
 # Take a zfs snapshot if zfs on root
 function take_zfs_snapshots() {
 	ZFS_INSTALLED=$(dpkg-query --show --showformat='${db:Status-Status}\n' 'zfsutils-linux' 2>&1)
+	ZSYS_INSTALLED=$(dpkg-query --show --showformat='${db:Status-Status}\n' 'zsys' 2>&1)
 
-	if [ $ZFS_INSTALLED == installed ]
+	if [ $ZFS_INSTALLED == installed && $ZSYS_INSTALLED == installed]
 	then
-
-		ZFS_ROOT_MOUNT=$(zfs get -pH -o value mountpoint rpool 2>&1)
-		ZFS_BOOT_MOUNT=$(zfs get -pH -o value mountpoint bpool 2>&1)
-		TIME_STAMP=$(date)
-	
-		if [[ $ZFS_ROOT_MOUNT == \/ && $ZFS_BOOT_MOUNT == \/boot ]]
-		then
-			echo ""
-			fancy_message info "ZFS on root detected.  Taking snapshots before making any changes:"
-			fancy_message info "rpool/ROOT@rollingrhino-$TIME_STAMP"
-			fancy_message info "bpool/BOOT@rollingrhino-$TIME_STAMP"
-			zfs snapshot -r rpool/ROOT@rollingrhino-"$TIME_STAMP"
-			zfs snapshot -r bpool/BOOT@rollingrhinoboot-"$TIME_STAMP"
-			echo ""
-		fi
+		echo ""
+		fancy_message info "ZFS on root detected.  Taking a snapshot before making any changes:"
+		zsysctl state save
+		echo ""
 	fi
 }
 
