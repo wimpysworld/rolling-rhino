@@ -34,6 +34,8 @@ obsolete/orphaned packages and **actively participating in any issue resolution
 for problems you may encounter** via [Launchpad](https://launchpad.net) using
 tools such as `apport` and `ubuntu-bug`.
 
+If the daily ISO you install is for an interim release, you will need to wait until the next LTS release opens and run a 'do-release-upgrade' from your installed system before you can join Rolling Rhino.
+
 You will see `W: Conflicting distribution:` warnings from `apt` as its
 configuration will now reference the `devel` series which is a pointer to the
 current in-development series. But they are just that, warnings.
