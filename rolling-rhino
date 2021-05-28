@@ -14,24 +14,23 @@ function fancy_message() {
     # 1 - warning
     # 2 - error
     if [ -z "${1}" ] || [ -z "${2}" ]; then
-      return
+      return 2
     fi
 
-    local RED="\e[31m"
-    local GREEN="\e[32m"
-    local YELLOW="\e[33m"
-    local RESET="\e[0m"
-    local MESSAGE_TYPE=""
-    local MESSAGE=""
-    MESSAGE_TYPE="${1}"
-    MESSAGE="${2}"
-    
-    case ${MESSAGE_TYPE} in
-      info) echo -e "  [${GREEN}+${RESET}] INFO: ${MESSAGE}";; # Previously "0"
-      warn) echo -e "  [${YELLOW}*${RESET}] WARNING: ${MESSAGE}";; # Previously "1"
-      error) echo -e "  [${RED}!${RESET}] ERROR: ${MESSAGE}";; # Previously "2"
-      *) echo -e "  [?] UNKNOWN: ${MESSAGE}";;
-    esac
+    local RED='\e[31m' GREEN='\e[32m' YELLOW='\e[33m' RESET='\e[0m'
+    local -A FORMATS=(
+      [info]="[${GREEN}+${RESET}] INFO"
+      [warn]="[${YELLOW}*${RESET}] WARNING"
+      [error]="[${RED}!${RESET}] ERROR"
+    )
+    local MESSAGE_TYPE="${1}" MESSAGE="${2}"
+
+    printf "  ${FORMATS["${MESSAGE_TYPE}"]-"[?] UNKNOWN"}: %s\\n" "${MESSAGE}"
+}
+
+function grep_active_ppas ()
+{
+  grep "$@" -e '^\s*deb\s' -R --include='*.list' /etc/apt/sources.list.d
 }
 
 echo "Rolling Rhino 🦏"
@@ -87,37 +86,32 @@ else
   exit 1
 fi
 
-DESKTOP_FOUND=0
-for META in kubuntu-desktop lubuntu-desktop ubuntu-desktop ubuntu-budgie-desktop ubuntukylin-desktop ubuntu-mate-desktop ubuntustudio-desktop xubuntu-desktop ubuntu-wsl; do
-  INSTALLED=$(env LANG=C apt list --installed "${META}" 2>/dev/null | grep installed)
-
-  if [ -n "${INSTALLED}" ]; then
-    fancy_message info "Detected ${META}."
-    DESKTOP_FOUND=1
-    break
-  fi
-done
-
-if [ ${DESKTOP_FOUND} -eq 0 ]; then
+META="$(
+  dpkg-query -Wf '${Status}\t${Package}\n' \
+    {{,k,l,x}ubuntu,ubuntu{-budgie,-mate,kylin,studio}}-desktop ubuntu-wsl \
+    2>/dev/null |
+  awk -F '\t' '($1 == "install ok installed") { print $2; exit; }')"
+if [ -n "${META}" ]; then
+  fancy_message info "Detected ${META}."
+else
   fancy_message error "No installed desktop packages were detected. Quitting."
   exit 1
 fi
 
-if [ -z "$(ls -A /etc/apt/sources.list.d/*.list 2>/dev/null)" ]; then
-  fancy_message info "No PPAs detected, this is good."
-else
+if grep_active_ppas -q; then
   fancy_message warn "PPAs detected, you're responsible for taking care of PPA migrations in the future."
   read -p "Do you want to disable the PPAs? [y/N]" -n 1 -r
-  if [[ ${REPLY} =~ ^[Yy]$ ]]; then
-    find /etc/apt/sources.list.d -type f -name "*.list" -print0 | \
-      while read -d $'\0' file; do sed -i 's/^\([^#].*\)/# \1/g' "$file"; done
+  if [[ "${REPLY}" =~ ^[Yy]$ ]]; then
+    grep_active_ppas -lZ | xargs -r0 -- sed -i.orig -e 's/^\s*[^#\s]/# &/'
   fi
+else
+  fancy_message info "No PPAs detected, this is good."
 fi
 
 fancy_message info "All checks passed."
 read -p "Are you sure you want to start tracking the devel series? [y/N]" -n 1 -r
 
-if [[ ${REPLY} =~ ^[Yy]$ ]]; then
+if [[ "${REPLY}" =~ ^[Yy]$ ]]; then
     HOST_ARCH="$(uname --machine)"
     if [ "${HOST_ARCH}" == "x86_64" ]; then
       ARCHIVE="http://archive.ubuntu.com/ubuntu"
@@ -126,7 +120,7 @@ if [[ ${REPLY} =~ ^[Yy]$ ]]; then
       ARCHIVE="http://ports.ubuntu.com/ubuntu-ports"
       SEC_ARCHIVE="http://ports.ubuntu.com/ubuntu-ports"
     fi
-    cp  /etc/apt/sources.list /etc/apt/sources.list.${OS_CODENAME}
+    cp  /etc/apt/sources.list "/etc/apt/sources.list.${OS_CODENAME}"
     cat << EOF > /etc/apt/sources.list
 # See http://help.ubuntu.com/community/UpgradeNotes for how to upgrade to
 # newer versions of the distribution.
