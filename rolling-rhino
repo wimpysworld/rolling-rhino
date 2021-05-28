@@ -87,18 +87,14 @@ else
   exit 1
 fi
 
-DESKTOP_FOUND=0
-for META in kubuntu-desktop lubuntu-desktop ubuntu-desktop ubuntu-budgie-desktop ubuntukylin-desktop ubuntu-mate-desktop ubuntustudio-desktop xubuntu-desktop ubuntu-wsl; do
-  INSTALLED=$(env LANG=C apt list --installed "${META}" 2>/dev/null | grep installed)
-
-  if [ -n "${INSTALLED}" ]; then
-    fancy_message info "Detected ${META}."
-    DESKTOP_FOUND=1
-    break
-  fi
-done
-
-if [ ${DESKTOP_FOUND} -eq 0 ]; then
+META="$(
+  dpkg-query -Wf '${Status}\t${Package}\n' \
+    {{,k,l,x}ubuntu,ubuntu{-budgie,-mate,kylin,studio}}-desktop ubuntu-wsl \
+    2>/dev/null |
+  awk -F '\t' '($1 == "install ok installed") { print $2; exit; }')"
+if [ -n "${META}" ]; then
+  fancy_message info "Detected ${META}."
+else
   fancy_message error "No installed desktop packages were detected. Quitting."
   exit 1
 fi
