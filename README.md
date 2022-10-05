@@ -1,5 +1,13 @@
 # Rolling Rhino
 
+> **This project has served its purpose. It inspired another group of developers to
+> create a [fully fledged Ubuntu Rolling Rhino distro](https://rollingrhino.org)**.
+>
+> **Therefore, this project is concluded and I encourage those of you seeking a
+> rolling Ubuntu to download the excellent [Rolling Rhino Remix](https://rollingrhino.org) 🦏**
+
+## History of the Rolling Rhino script
+
 Convert Ubuntu into a *"rolling release"* that tracks the `devel` series; **for the toughest of Ubuntu users**.
 
 <h1 align="center">
